@@ -16,7 +16,7 @@ public class EmailService(IConfiguration configuration, ILogger<EmailService> lo
 
         var body = $@"
             <p>Hola {username},</p>
-            <p>Gracias por registrarte en Kinal Sport. Por favor, haz clic en el siguiente enlace para verificar tu email:</p>
+            <p>Gracias por registrarte en UrbanCentral. Por favor, haz clic en el siguiente enlace para verificar tu email:</p>
             <p><a href='{verificationUrl}'>Verificar Email</a></p>
             <p>Si no te registraste, ignora este mensaje.</p>
             ";
