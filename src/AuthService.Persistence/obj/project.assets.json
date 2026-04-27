@@ -6121,19 +6121,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Angel Rodriguez\\.nuget\\packages\\": {}
+    "C:\\Users\\sebas\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Persistence\\AuthService.Persistence.csproj",
+      "projectUniqueName": "C:\\GestorDeRestaurantes\\Gestor-Restaurante-AuthService\\src\\AuthService.Persistence\\AuthService.Persistence.csproj",
       "projectName": "AuthService.Persistence",
-      "projectPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Persistence\\AuthService.Persistence.csproj",
-      "packagesPath": "C:\\Users\\Angel Rodriguez\\.nuget\\packages\\",
-      "outputPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Persistence\\obj\\",
+      "projectPath": "C:\\GestorDeRestaurantes\\Gestor-Restaurante-AuthService\\src\\AuthService.Persistence\\AuthService.Persistence.csproj",
+      "packagesPath": "C:\\Users\\sebas\\.nuget\\packages\\",
+      "outputPath": "C:\\GestorDeRestaurantes\\Gestor-Restaurante-AuthService\\src\\AuthService.Persistence\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Angel Rodriguez\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\sebas\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -6145,11 +6145,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Application\\AuthService.Application.csproj": {
-              "projectPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Application\\AuthService.Application.csproj"
+            "C:\\GestorDeRestaurantes\\Gestor-Restaurante-AuthService\\src\\AuthService.Application\\AuthService.Application.csproj": {
+              "projectPath": "C:\\GestorDeRestaurantes\\Gestor-Restaurante-AuthService\\src\\AuthService.Application\\AuthService.Application.csproj"
             },
-            "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Domain\\AuthService.Domain.csproj": {
-              "projectPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Domain\\AuthService.Domain.csproj"
+            "C:\\GestorDeRestaurantes\\Gestor-Restaurante-AuthService\\src\\AuthService.Domain\\AuthService.Domain.csproj": {
+              "projectPath": "C:\\GestorDeRestaurantes\\Gestor-Restaurante-AuthService\\src\\AuthService.Domain\\AuthService.Domain.csproj"
             }
           }
         }
@@ -6163,7 +6163,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -6200,7 +6201,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.420/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
