@@ -28,23 +28,41 @@ Antes de comenzar, asegúrate de tener instalado:
 
 Sigue estos pasos para levantar el proyecto localmente:
 
+### Cración del Contenedor de Docker
+```bash
+docker run --name pg-auth-service \
+  -e POSTGRES_DB=auth_restaurant_db \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=admin123 \
+  -p 5433:5432 \
+  -d postgres:latest
+```
+
 ### 1. Clonar el repositorio
 ```bash
 git clone [https://github.com/Angel-SSJ2/Gestor-Restaurante-AuthService.git](https://github.com/Angel-SSJ2/Gestor-Restaurante-AuthService.git)
 cd Gestor-Restaurante-AuthService
 ```
 
+### 2. Restaurar dependencias y CompilarBashdotnet restore
 ```bash
-2. Restaurar dependencias y CompilarBashdotnet restore
 dotnet build
 ```
-
+### 3. Correr el Proyecto
 ```bash
-3. Actualizar Base de Datos (Migrations)Bashdotnet ef database update --project src/AuthService.Persistence --startup-project src/AuthService.Api
-🐳 DockerizaciónEl proyecto incluye configuración para ejecutarse en contenedores Docker de manera eficiente.Construir la imagen localDesde la raíz del proyecto, ejecuta el siguiente comando:Bashdocker build -t auth-service-api -f src/AuthService.Api/Dockerfile .
-Levantar el contenedorBashdocker run -d -p 8080:8080 --name gestor-restaurante auth-service-api
+dotnet run
 ```
 
+Una vez en ejecución, accede a Swagger en:
+👉 http://localhost:5000/swagger
 
-🏃 Cómo Correr el ProyectoUsando la CLI de .NETBashdotnet run --project src/AuthService.Api/AuthService.Api.csproj
-Una vez en ejecución, puedes acceder a la documentación interactiva (Swagger) en:👉 http://localhost:5000/swagger📋 Módulos del SistemaMóduloFuncionalidad🛡️ AuthServiceManejo de identidad, roles y tokens JWT.🏠 RestaurantsGestión de sucursales, horarios y datos generales.📅 ReservationsControl de mesas, disponibilidad y fechas.🎉 EventsOrganización de noches temáticas y promociones.⭐ ReviewsSistema de feedback, comentarios y ratings.🍽️ MenusAdministración de platillos, precios y categorías.
+## 📋 Módulos del Sistema
+
+| Módulo | Funcionalidad |
+| :--- | :--- |
+| **🛡️ AuthService** | Manejo de identidad, roles y tokens JWT. |
+| **🏠 Restaurants** | Gestión de sucursales, horarios y datos generales. |
+| **📅 Reservations** | Control de mesas, disponibilidad y fechas. |
+| **🎉 Events** | Organización de noches temáticas y promociones. |
+| **⭐ Reviews** | Sistema de feedback, comentarios y ratings. |
+| **🍽️ Menus** | Administración de platillos, precios y categorías. |
