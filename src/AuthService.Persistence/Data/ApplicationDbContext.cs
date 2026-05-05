@@ -18,6 +18,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<UserEmail> UserEmails { get; set; }
     public DbSet<UserPasswordReset> UserPasswordResets { get; set; }
+    public DbSet<Restaurant> Restaurants { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<Table> Tables { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<Event> Events { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

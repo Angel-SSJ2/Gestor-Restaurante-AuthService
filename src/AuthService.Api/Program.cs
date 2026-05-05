@@ -10,52 +10,39 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// --- 1. CONFIGURACIÓN INICIAL ---
 
-// CONFIGURACIÓN
-// FIX: Bypass SSL (Cloudinary, etc.)
+// FIX: Bypass SSL para servicios externos si es necesario
 System.Net.ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 
-
-// Configura Serilog como el motor de registro (logging) principal de tu aplicación
-// reemplazando al sistema por defecto de .NET.
+// Configuración de Serilog
 builder.Host.UseSerilog((context, services, loggerConfiguration) =>
     loggerConfiguration
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services));
 
+// --- 2. REGISTRO DE SERVICIOS ---
 
-// Integra la configuración de FileDataModelBinderProvider.cs
 builder.Services.AddControllers(options =>
 {
-    // Agregar el model binder para IFileData
     options.ModelBinderProviders.Insert(0, new FileDataModelBinderProvider());
 })
 .AddJsonOptions(o =>
 {
-    // Estandarizar las respuestas en camelCase para coincidir con auth-node
     o.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
 });
 
-
-// CONFIGURACIÓN DE SERVICIOS POR MEDIO DE MÉTODOS DE EXTENSIÓN
+// Métodos de extensión para modularizar la configuración
 builder.Services.AddApiDocumentation();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddRateLimitingPolicies();
-
-
-// INTEGRAR SERVICIOS DE SEGURIDAD
 builder.Services.AddSecurityPolicies(builder.Configuration);
 builder.Services.AddSecurityOptions();
 
-
-// .....................................................
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-//--------ALGO----------
-
+// Configuración de Swagger con soporte para XML Comments
 builder.Services.AddSwaggerGen(options =>
 {
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -69,47 +56,48 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// --- 3. MIDDLEWARES (EL ORDEN IMPORTA) ---
 
-// CONFIGURACIÓN DE HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        // Si quieres que Swagger cargue en la raíz, descomenta:
+        // c.RoutePrefix = string.Empty;
+    });
 }
 
-// Add Serilog request logging
 app.UseSerilogRequestLogging();
 
-// Add Security Headers using NetEscapades package
+// CONFIGURACIÓN DE SEGURIDAD (Ajustada para permitir Swagger)
 app.UseSecurityHeaders(policies => policies
     .AddDefaultSecurityHeaders()
     .RemoveServerHeader()
-    .AddFrameOptionsDeny()
+    .AddFrameOptionsSameOrigin() // Cambiado de Deny a SameOrigin para Swagger
     .AddXssProtectionBlock()
     .AddContentTypeOptionsNoSniff()
     .AddReferrerPolicyStrictOriginWhenCrossOrigin()
-    .AddContentSecurityPolicy(builder =>
+    .AddContentSecurityPolicy(cspBuilder =>
     {
-        builder.AddDefaultSrc().Self();
-        builder.AddScriptSrc().Self().UnsafeInline();
-        builder.AddStyleSrc().Self().UnsafeInline();
-        builder.AddImgSrc().Self().Data();
-        builder.AddFontSrc().Self().Data();
-        builder.AddConnectSrc().Self();
-        builder.AddFrameAncestors().None();
-        builder.AddBaseUri().Self();
-        builder.AddFormAction().Self();
+        cspBuilder.AddDefaultSrc().Self();
+        // Permitimos unsafe-inline para que Swagger UI pueda renderizar sus estilos y scripts
+        cspBuilder.AddScriptSrc().Self().UnsafeInline();
+        cspBuilder.AddStyleSrc().Self().UnsafeInline();
+        cspBuilder.AddImgSrc().Self().Data();
+        cspBuilder.AddFontSrc().Self().Data();
+        // Permitir que el navegador haga fetch a la propia API
+        cspBuilder.AddConnectSrc().Self(); 
+        cspBuilder.AddFrameAncestors().None();
+        cspBuilder.AddBaseUri().Self();
+        cspBuilder.AddFormAction().Self();
     })
     .AddCustomHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()")
     .AddCustomHeader("Cache-Control", "no-store, no-cache, must-revalidate, private")
 );
 
-// Global exception handling
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-
-
-// Core middlewares
 app.UseHttpsRedirection();
 app.UseCors("DefaultCorsPolicy");
 app.UseRateLimiter();
@@ -118,58 +106,48 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// --- 4. ENDPOINTS DE SALUD (HEALTH CHECKS) ---
 
-// Health check endpoints - both versions for compatibility
-// Standard health check endpoint
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health/status"); // Endpoint estándar de .NET cambiado para evitar conflicto
 
-
-// Custom health endpoint to match Node.js response format
 app.MapGet("/health", () =>
 {
-    var response = new
+    return Results.Ok(new
     {
         status = "Healthy",
         timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
-    };
-    return Results.Ok(response);
+    });
 });
 
 app.MapHealthChecks("/api/v1/health");
 
+// --- 5. LOG DE INICIO ---
 
-
-// Startup log: addresses and health endpoint
 var startupLogger = app.Services.GetRequiredService<ILogger<Program>>();
 app.Lifetime.ApplicationStarted.Register(() =>
 {
     try
     {
-        var server = app.Services.GetRequiredService<IServer>();
+        var server = app.Services.GetRequiredService<Microsoft.AspNetCore.Hosting.Server.IServer>();
         var addressesFeature = server.Features.Get<IServerAddressesFeature>();
-        var addresses = (IEnumerable<string>?)addressesFeature?.Addresses ?? app.Urls;
+        var addresses = addressesFeature?.Addresses ?? app.Urls;
 
         if (addresses != null && addresses.Any())
         {
             foreach (var addr in addresses)
             {
-                var health = $"{addr.TrimEnd('/')}/health";
-                startupLogger.LogInformation("AuthService API is running at {Url}. Health endpoint: {HealthUrl}", addr, health);
+                startupLogger.LogInformation("AuthService API is running at {Url}. Swagger: {Url}/swagger", addr, addr.TrimEnd('/'));
             }
-        }
-        else
-        {
-            startupLogger.LogInformation("AuthService API started. Health endpoint: /health");
         }
     }
     catch (Exception ex)
     {
-        startupLogger.LogWarning(ex, "Failed to determine the listening addresses for startup log");
+        startupLogger.LogWarning(ex, "Failed to determine the listening addresses");
     }
 });
 
+// --- 6. INICIALIZACIÓN DE DB (MIGRACIONES Y SEED) ---
 
-// Initialize database and seed data
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -178,8 +156,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         logger.LogInformation("Checking database connection...");
-
-        // Ensure database is created (similar to Sequelize sync in Node.js)
+        
+        // EnsureCreatedAsync crea la base de datos si no existe basándose en tu ApplicationDbContext
         await context.Database.EnsureCreatedAsync();
 
         logger.LogInformation("Database ready. Running seed data...");
@@ -190,9 +168,9 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         logger.LogError(ex, "An error occurred while initializing the database");
-        throw; // Re-throw to stop the application
+        // No lanzamos throw aquí para permitir que la app intente iniciar aunque falle la DB 
+        // (útil para debuggear el frontend/swagger)
     }
 }
-
 
 app.Run();
