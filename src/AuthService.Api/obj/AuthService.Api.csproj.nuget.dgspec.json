@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Api\\AuthService.Api.csproj": {}
+    "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.api\\AuthService.Api.csproj": {}
   },
   "projects": {
-    "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Api\\AuthService.Api.csproj": {
+    "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.api\\AuthService.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Api\\AuthService.Api.csproj",
+        "projectUniqueName": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.api\\AuthService.Api.csproj",
         "projectName": "AuthService.Api",
-        "projectPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Api\\AuthService.Api.csproj",
+        "projectPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.api\\AuthService.Api.csproj",
         "packagesPath": "C:\\Users\\Angel Rodriguez\\.nuget\\packages\\",
-        "outputPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.Api\\obj\\",
+        "outputPath": "D:\\6to\\1Bim\\GestorRestaurante-Microservicios\\Gestor-Restaurante-AuthService\\src\\AuthService.api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Angel Rodriguez\\AppData\\Roaming\\NuGet\\NuGet.Config"
