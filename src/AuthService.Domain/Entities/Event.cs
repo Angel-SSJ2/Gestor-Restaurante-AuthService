@@ -9,10 +9,11 @@ namespace AuthService.Domain.Entities
         public string? Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string? Location { get; set; } // Puede ser "Terraza", "Salón Principal", etc.
+        public string? Location { get; set; }
+        public int Capacity { get; set; }
+        public decimal Price { get; set; } 
         public bool IsActive { get; set; } = true;
 
-        // Relación: Un Evento pertenece a un Restaurante
         public Guid RestaurantId { get; set; }
         public Restaurant? Restaurant { get; set; }
     }
