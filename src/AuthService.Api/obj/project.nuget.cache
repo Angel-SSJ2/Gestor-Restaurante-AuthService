@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "InYJppedhUI=",
+  "dgSpecHash": "JDL+/8ztSOg=",
   "success": true,
   "projectFilePath": "/home/angelssj1/Documentos/GestorDeRestaurantes/Gestor-Restaurante-AuthService/src/AuthService.Api/AuthService.Api.csproj",
   "expectedPackageFiles": [
     "/home/angelssj1/.nuget/packages/bouncycastle.cryptography/2.6.2/bouncycastle.cryptography.2.6.2.nupkg.sha512",
     "/home/angelssj1/.nuget/packages/cloudinarydotnet/1.28.0/cloudinarydotnet.1.28.0.nupkg.sha512",
+    "/home/angelssj1/.nuget/packages/dotenv.net/4.0.2/dotenv.net.4.0.2.nupkg.sha512",
     "/home/angelssj1/.nuget/packages/efcore.namingconventions/8.0.0/efcore.namingconventions.8.0.0.nupkg.sha512",
     "/home/angelssj1/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512",
     "/home/angelssj1/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",

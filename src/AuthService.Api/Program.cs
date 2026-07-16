@@ -7,6 +7,11 @@ using Serilog;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System.Reflection;
+using dotenv.net;
+using Microsoft.EntityFrameworkCore;
+
+// Carga variables del archivo .env
+DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -157,8 +162,8 @@ using (var scope = app.Services.CreateScope())
     {
         logger.LogInformation("Checking database connection...");
         
-        // EnsureCreatedAsync crea la base de datos si no existe basándose en tu ApplicationDbContext
-        await context.Database.EnsureCreatedAsync();
+        // MigrateAsync aplica las migraciones pendientes (creando tablas si no existen) ya que en Supabase la base de datos "postgres" ya existe y EnsureCreatedAsync no haría nada
+        await context.Database.MigrateAsync();
 
         logger.LogInformation("Database ready. Running seed data...");
         await DataSeeder.SeedAsync(context);
