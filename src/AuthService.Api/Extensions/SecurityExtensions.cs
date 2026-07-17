@@ -20,6 +20,12 @@ public static class SecurityExtensions
                 var allowedOrigins = configuration.GetSection("Security:AllowedOrigins").Get<string[]>()
                     ?? DefaultAllowedOrigins;
 
+                var envAllowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS");
+                if (!string.IsNullOrEmpty(envAllowedOrigins))
+                {
+                    allowedOrigins = envAllowedOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                }
+
                 builder.WithOrigins(allowedOrigins)
                        .AllowAnyHeader()
                        .WithMethods(AllowedHttpMethods)
