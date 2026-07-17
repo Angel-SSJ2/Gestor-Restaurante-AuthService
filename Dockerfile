@@ -21,6 +21,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/out .
 
+# Fix for .NET 8 permissions (Serilog and DataProtection need write access)
+RUN chown -R app:app /app
+USER app
+
 # Configurar el puerto de escucha para que ASP.NET Core enlace con el puerto expuesto
 ENV ASPNETCORE_URLS=http://+:5156
 EXPOSE 5156
